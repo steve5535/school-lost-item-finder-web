@@ -1,9 +1,6 @@
 package com.study.schoollostitemfinder.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,17 +12,20 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long itemId;
-    private Long studentId;
+
     private String itemName;
     private String itemPlace;
     private String itemImg;
     private String signUpAt;
 
-    public Item(String signUpAt, String itemImg, String itemPlace, String itemName, Long studentId) {
-        this.signUpAt = signUpAt;
-        this.itemImg = itemImg;
-        this.itemPlace = itemPlace;
+    @ManyToOne
+    private Student student;
+
+    public Item(String itemName, String itemPlace, String itemImg, String signUpAt, Student studentId) {
         this.itemName = itemName;
-        this.studentId = studentId;
+        this.itemPlace = itemPlace;
+        this.itemImg = itemImg;
+        this.signUpAt = signUpAt;
+        this.student = studentId;
     }
 }

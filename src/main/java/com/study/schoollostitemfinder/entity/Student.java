@@ -15,8 +15,14 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long studentId;
-    private long itemId;
+
     private int studentNumber;
     private String studentName;
     private String takeAt;
+
+    public Student(int studentNumber, String studentName, String takeAt) {
+        this.studentNumber = studentNumber;
+        this.studentName = studentName;
+        this.takeAt = takeAt;
+    }
 }
