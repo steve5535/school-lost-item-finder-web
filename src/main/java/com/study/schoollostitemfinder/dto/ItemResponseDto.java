@@ -8,6 +8,7 @@ import lombok.Getter;
 public class ItemResponseDto {
     private Long itemId;
     private String itemName;
+    private String itemDetail;
     private String itemPlace;
     private String itemImg;
     private String signUpAt;

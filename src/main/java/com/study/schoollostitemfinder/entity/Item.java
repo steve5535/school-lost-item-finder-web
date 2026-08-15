@@ -14,6 +14,7 @@ public class Item {
     private Long itemId;
 
     private String itemName;
+    private String itemDetail;
     private String itemPlace;
     private String itemImg;
     private String signUpAt;
@@ -21,8 +22,9 @@ public class Item {
     @ManyToOne
     private Student student;
 
-    public Item(String itemName, String itemPlace, String itemImg, String signUpAt, Student studentId) {
+    public Item(String itemName, String itemDetail, String itemPlace, String itemImg, String signUpAt, Student studentId) {
         this.itemName = itemName;
+        this.itemDetail = itemDetail;
         this.itemPlace = itemPlace;
         this.itemImg = itemImg;
         this.signUpAt = signUpAt;
