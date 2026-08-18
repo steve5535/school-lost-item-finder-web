@@ -1,5 +1,6 @@
 package com.study.schoollostitemfinder.entity;
 
+import com.study.schoollostitemfinder.common.TimeStamped;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Student {
+public class Student extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,11 +19,9 @@ public class Student {
 
     private int studentNumber;
     private String studentName;
-    private String takeAt;
 
-    public Student(int studentNumber, String studentName, String takeAt) {
+    public Student(int studentNumber, String studentName) {
         this.studentNumber = studentNumber;
         this.studentName = studentName;
-        this.takeAt = takeAt;
     }
 }
