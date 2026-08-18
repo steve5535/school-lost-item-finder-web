@@ -38,9 +38,20 @@ public class ItemService {
     }
 
     // 단건 조회
-    public List<ItemResponseDto> getItem(Long itemId) {
-        List<Item> items = itemRepository.findById(itemId);
-
+    public ItemResponseDto getItem(Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 item은 존재하지 않습니다."));
+        ItemResponseDto responseDto = new ItemResponseDto(
+                item.getItemId(),
+                item.getItemName(),
+                item.getItemDetail(),
+                item.getItemPlace(),
+                item.getItemImg(),
+                item.getSignUpAt(),
+                item.getTakeAt(),
+                item.getStudent()
+        );
+        return responseDto;
     }
 
     // 분실물 등록

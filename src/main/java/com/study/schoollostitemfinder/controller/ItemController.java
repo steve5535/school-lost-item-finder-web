@@ -22,8 +22,8 @@ public class ItemController {
 
     // 단건조회
     @GetMapping("/items/{itemId}")
-    private String getItem(@PathVariable Long itemId) {
-        return "단건조회";
+    private ItemResponseDto getItem(@PathVariable Long itemId) {
+        return itemService.getItem(itemId);
     }
 
     // 등록
