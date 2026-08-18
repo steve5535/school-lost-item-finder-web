@@ -17,6 +17,7 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
+    // 분실물 전체 조회
     public List<ItemResponseDto> getItems() {
         List<Item> items = itemRepository.findAll();
         List<ItemResponseDto> responseDtos = new ArrayList<>();
@@ -31,11 +32,18 @@ public class ItemService {
                     item.getTakeAt(),
                     item.getStudent()
             );
-
+            responseDtos.add(responseDto);
         };
         return responseDtos;
     }
 
+    // 단건 조회
+    public List<ItemResponseDto> getItem(Long itemId) {
+        List<Item> items = itemRepository.findById(itemId);
+
+    }
+
+    // 분실물 등록
     @Transactional
     public String singUpItem(ItemRequestDto dto) {
         Item item = new Item(

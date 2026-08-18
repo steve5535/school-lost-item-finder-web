@@ -16,8 +16,8 @@ public class ItemController {
 
     // 전체조회
     @GetMapping("/items")
-    public String getItems() {
-        return "d";
+    public List<ItemResponseDto> getItems() {
+        return itemService.getItems();
     }
 
     // 단건조회
