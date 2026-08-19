@@ -19,9 +19,11 @@ public class Student extends TimeStamped {
 
     private int studentNumber;
     private String studentName;
+    private String password;
 
-    public Student(int studentNumber, String studentName) {
+    public Student(int studentNumber, String studentName, String password) {
         this.studentNumber = studentNumber;
         this.studentName = studentName;
+        this.password = password;
     }
 }

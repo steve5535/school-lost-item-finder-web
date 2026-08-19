@@ -2,6 +2,7 @@ package com.study.schoollostitemfinder.controller;
 
 import com.study.schoollostitemfinder.dto.ItemRequestDto;
 import com.study.schoollostitemfinder.dto.ItemResponseDto;
+import com.study.schoollostitemfinder.dto.TakeItemRequestDto;
 import com.study.schoollostitemfinder.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemController {
 
-    public final ItemService itemService;
+    private final ItemService itemService;
 
     // 전체조회
     @GetMapping("/items")
@@ -26,10 +27,31 @@ public class ItemController {
         return itemService.getItem(itemId);
     }
 
+    // 수정
+    @PatchMapping("/items/{itemId}")
+    private ItemResponseDto updateItem(@PathVariable Long itemId, @RequestBody ItemRequestDto requestDto) {
+        return itemService.updateItem(itemId, requestDto);
+    }
+
+    // 삭제
+    @DeleteMapping("items/{itemId}")
+    private String deleteItem(@PathVariable Long itemId) {
+        itemService.deleteItem(itemId);
+        return "삭제 완료";
+    }
+
     // 등록
     @PostMapping("/items")
     public String signUp(@RequestBody ItemRequestDto requestDto) {
         return itemService.singUpItem(requestDto);
+    }
+
+    // 분실물 가져가기
+    @PatchMapping("/items/take/{itemId}")
+    public String takeItem(@PathVariable Long itemId, @RequestBody TakeItemRequestDto requestDto) {
+        itemService.takeItem(itemId, requestDto);
+
+        return "가져가기 완료";
     }
 
 

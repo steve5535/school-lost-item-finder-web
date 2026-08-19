@@ -15,6 +15,6 @@ public class ItemResponseDto {
     private String itemPlace;
     private String itemImg;
     private LocalDateTime signUpAt;
-    private String takeAt;
+    private LocalDateTime takeAt;
     private Student student;
 }

@@ -6,9 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor
 @Getter
+@Setter
 public class Item extends TimeStamped {
 
     @Id
@@ -19,7 +22,7 @@ public class Item extends TimeStamped {
     private String itemDetail;
     private String itemPlace;
     private String itemImg;
-    private String takeAt;
+    private LocalDateTime takeAt;
 
     @ManyToOne
     private Student student;
