@@ -1,21 +1,37 @@
 package com.study.schoollostitemfinder.controller;
 
 import com.study.schoollostitemfinder.dto.StudentRequestDto;
+import com.study.schoollostitemfinder.dto.StudentResponseDto;
 import com.study.schoollostitemfinder.service.StudentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class StudentController {
 
     private final StudentService studentService;
 
     // 학생 등록
     @PostMapping("/student")
-    public String singUp(@RequestBody StudentRequestDto requestDto) {
+    public StudentResponseDto singUp(@RequestBody StudentRequestDto requestDto) {
+        log.info("학생 등록 완료");
         return studentService.singUp(requestDto);
+    }
+
+    // 학생 수정
+    @PatchMapping("/student/{studentId}")
+    public StudentResponseDto updateStudent(@PathVariable Long studentId, @RequestBody StudentRequestDto requestDto) {
+        log.info("학생 수정 완료");
+        return studentService.updateStudent(studentId, requestDto);
+    }
+
+    // 학생 삭제
+    @DeleteMapping("/student/{studentId}")
+    public void deleteStudent(@PathVariable Long studentId) {
+        studentService.deleteStudent(studentId);
+        log.info("학생 삭제 완료");
     }
 }

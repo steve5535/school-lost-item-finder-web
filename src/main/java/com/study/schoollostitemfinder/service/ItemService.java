@@ -70,7 +70,18 @@ public class ItemService {
         item.setItemPlace(dto.getItemPlace());
         item.setItemImg(dto.getItemImg());
 
-        return null;
+        ItemResponseDto responseDto = new ItemResponseDto(
+                item.getItemId(),
+                item.getItemName(),
+                item.getItemDetail(),
+                item.getItemPlace(),
+                item.getItemImg(),
+                item.getSignUpAt(),
+                item.getTakeAt(),
+                item.getStudent()
+        );
+
+        return responseDto;
     }
 
     // 분실물 삭제
@@ -80,7 +91,7 @@ public class ItemService {
 
     // 분실물 등록
     @Transactional
-    public String singUpItem(ItemRequestDto dto) {
+    public ItemResponseDto singUpItem(ItemRequestDto dto) {
         Item item = new Item(
                 dto.getItemName(),
                 dto.getItemDetail(),
@@ -88,12 +99,24 @@ public class ItemService {
                 dto.getItemImg()
         );
         itemRepository.save(item);
-        return "분실물 등록 완료";
+
+        ItemResponseDto responseDto = new ItemResponseDto(
+                item.getItemId(),
+                item.getItemName(),
+                item.getItemDetail(),
+                item.getItemPlace(),
+                item.getItemImg(),
+                item.getSignUpAt(),
+                item.getTakeAt(),
+                item.getStudent()
+        );
+
+        return responseDto;
     }
 
     // 분실물 가져가기
     @Transactional
-    public void takeItem(Long itemId, TakeItemRequestDto dto){
+    public ItemResponseDto takeItem(Long itemId, TakeItemRequestDto dto){
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 item은 존재하지 않습니다."));
 
@@ -102,6 +125,19 @@ public class ItemService {
 
         item.setStudent(student);
         item.setTakeAt(LocalDateTime.now());
+
+        ItemResponseDto responseDto = new ItemResponseDto(
+                item.getItemId(),
+                item.getItemName(),
+                item.getItemDetail(),
+                item.getItemPlace(),
+                item.getItemImg(),
+                item.getSignUpAt(),
+                item.getTakeAt(),
+                item.getStudent()
+        );
+
+        return responseDto;
     }
 
 }
