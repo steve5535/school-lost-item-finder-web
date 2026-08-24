@@ -5,8 +5,10 @@ import com.study.schoollostitemfinder.dto.ItemResponseDto;
 import com.study.schoollostitemfinder.dto.TakeItemRequestDto;
 import com.study.schoollostitemfinder.entity.Item;
 import com.study.schoollostitemfinder.entity.Student;
+import com.study.schoollostitemfinder.entity.TemporaryItem;
 import com.study.schoollostitemfinder.repository.ItemRepository;
 import com.study.schoollostitemfinder.repository.StudentRepository;
+import com.study.schoollostitemfinder.repository.TemporaryItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final StudentRepository studentRepository;
+    private final TemporaryItemRepository temporaryItemRepository;
 
     // 분실물 전체 조회
     public List<ItemResponseDto> getItems() {
@@ -89,14 +92,18 @@ public class ItemService {
         itemRepository.deleteById(itemId);
     }
 
-    // 분실물 등록
+    // 임시 아이템에서 아이템으로 변경한 분실물 등록
     @Transactional
-    public ItemResponseDto singUpItem(ItemRequestDto dto) {
+    public ItemResponseDto singUpItem(Long temporaryItem) {
+        TemporaryItem TemporaryItem = temporaryItemRepository.findById(temporaryItem)
+                .orElseThrow(() -> new IllegalArgumentException("해당 아이템은 없습니다."));
+
         Item item = new Item(
-                dto.getItemName(),
-                dto.getItemDetail(),
-                dto.getItemPlace(),
-                dto.getItemImg()
+                TemporaryItem.getItemName(),
+                TemporaryItem.getItemDetail(),
+                TemporaryItem.getItemPlace(),
+                TemporaryItem.getItemImg(),
+                TemporaryItem.getSignUpAt()
         );
         itemRepository.save(item);
 

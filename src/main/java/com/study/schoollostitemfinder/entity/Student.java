@@ -21,11 +21,9 @@ public class Student extends TimeStamped {
 
     private int studentNumber;
     private String studentName;
-    private String password;
 
-    public Student(int studentNumber, String studentName, String password) {
+    public Student(int studentNumber, String studentName) {
         this.studentNumber = studentNumber;
         this.studentName = studentName;
-        this.password = password;
     }
 }

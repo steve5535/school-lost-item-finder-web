@@ -45,11 +45,11 @@ public class ItemController {
         log.info("분실물 삭제 완료");
     }
 
-    // 등록
-    @PostMapping("/items")
-    public ItemResponseDto signUp(@RequestBody ItemRequestDto requestDto) {
+    // 임시 아이템 -> 아이템으로 등록
+    @PostMapping("/items/{temporaryItem}")
+    public ItemResponseDto signUp(@PathVariable Long temporaryItem) {
         log.info("분실물 등록 완료");
-        return itemService.singUpItem(requestDto);
+        return itemService.singUpItem(temporaryItem);
     }
 
     // 분실물 가져가기

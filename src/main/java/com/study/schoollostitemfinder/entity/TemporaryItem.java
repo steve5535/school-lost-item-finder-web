@@ -1,18 +1,19 @@
 package com.study.schoollostitemfinder.entity;
 
 import com.study.schoollostitemfinder.common.TimeStamped;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
-public class Item{
+public class TemporaryItem extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,17 +23,13 @@ public class Item{
     private String itemDetail;
     private String itemPlace;
     private String itemImg;
-    private LocalDateTime signUpAt;
-    private LocalDateTime takeAt;
+    private Boolean isAccept;
 
-    @ManyToOne
-    private Student student;
-
-    public Item(String itemName, String itemDetail, String itemPlace, String itemImg, LocalDateTime signUpAt) {
+    public TemporaryItem(String itemName, String itemDetail, String itemPlace, String itemImg, Boolean isAccept) {
         this.itemName = itemName;
         this.itemDetail = itemDetail;
         this.itemPlace = itemPlace;
         this.itemImg = itemImg;
-        this.signUpAt = signUpAt;
+        this.isAccept = null;
     }
 }

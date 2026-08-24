@@ -21,13 +21,6 @@ public class StudentController {
         return studentService.singUp(requestDto);
     }
 
-    // 학생 수정
-    @PatchMapping("/student/{studentId}")
-    public StudentResponseDto updateStudent(@PathVariable Long studentId, @RequestBody StudentRequestDto requestDto) {
-        log.info("학생 수정 완료");
-        return studentService.updateStudent(studentId, requestDto);
-    }
-
     // 학생 삭제
     @DeleteMapping("/student/{studentId}")
     public void deleteStudent(@PathVariable Long studentId) {
