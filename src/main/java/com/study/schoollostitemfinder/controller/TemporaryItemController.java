@@ -42,4 +42,11 @@ public class TemporaryItemController {
         log.info("임시 아이템 거절 완료");
         return temporaryItemService.declineState(itemId);
     }
+
+    // 삭제
+    @DeleteMapping("/temporary-item/{itemId}")
+    public void deleteItem(@PathVariable Long itemId) {
+        log.info("임시 아이템 삭제 완료");
+        temporaryItemService.deleteItem(itemId);
+    }
 }

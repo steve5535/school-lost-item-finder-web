@@ -32,7 +32,7 @@ public class StudentService {
         return responseDto;
     }
 
-    // 학생 삭제
+    // 학생 삭제(관리자)
     @Transactional
     public void deleteStudent(Long studentId) {
         studentRepository.deleteById(studentId);

@@ -17,7 +17,7 @@ public class TemporaryItem extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long itemId;
+    private Long temporaryItemId;
 
     private String itemName;
     private String itemDetail;

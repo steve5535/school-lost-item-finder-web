@@ -23,7 +23,7 @@ public class TemporaryItemService {
         List<TemporaryItemResponseDto> responseDtos = new ArrayList<>();
         for(TemporaryItem item : items) {
             TemporaryItemResponseDto responseDto = new TemporaryItemResponseDto(
-                    item.getItemId(),
+                    item.getTemporaryItemId(),
                     item.getItemName(),
                     item.getItemDetail(),
                     item.getItemPlace(),
@@ -50,7 +50,7 @@ public class TemporaryItemService {
         temporaryItemRepository.save(temporaryItem);
 
         TemporaryItemResponseDto responseDto = new TemporaryItemResponseDto(
-                temporaryItem.getItemId(),
+                temporaryItem.getTemporaryItemId(),
                 temporaryItem.getItemName(),
                 temporaryItem.getItemDetail(),
                 temporaryItem.getItemPlace(),
@@ -70,7 +70,7 @@ public class TemporaryItemService {
         item.setIsAccept(true);
 
         TemporaryItemResponseDto responseDto = new TemporaryItemResponseDto(
-                item.getItemId(),
+                item.getTemporaryItemId(),
                 item.getItemName(),
                 item.getItemDetail(),
                 item.getItemPlace(),
@@ -90,7 +90,7 @@ public class TemporaryItemService {
         item.setIsAccept(false);
 
         TemporaryItemResponseDto responseDto = new TemporaryItemResponseDto(
-                item.getItemId(),
+                item.getTemporaryItemId(),
                 item.getItemName(),
                 item.getItemDetail(),
                 item.getItemPlace(),
@@ -99,5 +99,11 @@ public class TemporaryItemService {
                 item.getSignUpAt()
         );
         return responseDto;
+    }
+
+    // 아이템 삭제
+    @Transactional
+    public void deleteItem(Long itemId) {
+        temporaryItemRepository.deleteById(itemId);
     }
 }

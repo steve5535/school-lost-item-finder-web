@@ -62,7 +62,7 @@ public class ItemService {
         return responseDto;
     }
 
-    // 분실물 수정
+    // 분실물 수정(관리자)
     @Transactional
     public ItemResponseDto updateItem(Long itemId, ItemRequestDto dto) {
         Item item = itemRepository.findById(itemId)
@@ -87,15 +87,15 @@ public class ItemService {
         return responseDto;
     }
 
-    // 분실물 삭제
+    // 분실물 삭제(관리자)
     public void deleteItem(Long itemId) {
         itemRepository.deleteById(itemId);
     }
 
     // 임시 아이템에서 아이템으로 변경한 분실물 등록
     @Transactional
-    public ItemResponseDto singUpItem(Long temporaryItem) {
-        TemporaryItem TemporaryItem = temporaryItemRepository.findById(temporaryItem)
+    public ItemResponseDto singUpItem(Long temporaryItemId) {
+        TemporaryItem TemporaryItem = temporaryItemRepository.findById(temporaryItemId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 아이템은 없습니다."));
 
         Item item = new Item(
@@ -127,6 +127,7 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 item은 존재하지 않습니다."));
 
+        // 미리 등록된 학생의 학번이 일치하는지 확인
         Student student = studentRepository.findByStudentNumber(dto.getStudentNumber())
                 .orElseThrow(() -> new IllegalArgumentException("해당 학번의 학생은 존재하지 않습니다"));
 
