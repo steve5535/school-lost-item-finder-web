@@ -92,35 +92,6 @@ public class ItemService {
         itemRepository.deleteById(itemId);
     }
 
-    // 임시 아이템에서 아이템으로 변경한 분실물 등록
-    @Transactional
-    public ItemResponseDto singUpItem(Long temporaryItemId) {
-        TemporaryItem TemporaryItem = temporaryItemRepository.findById(temporaryItemId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 아이템은 없습니다."));
-
-        Item item = new Item(
-                TemporaryItem.getItemName(),
-                TemporaryItem.getItemDetail(),
-                TemporaryItem.getItemPlace(),
-                TemporaryItem.getItemImg(),
-                TemporaryItem.getSignUpAt()
-        );
-        itemRepository.save(item);
-
-        ItemResponseDto responseDto = new ItemResponseDto(
-                item.getItemId(),
-                item.getItemName(),
-                item.getItemDetail(),
-                item.getItemPlace(),
-                item.getItemImg(),
-                item.getSignUpAt(),
-                item.getTakeAt(),
-                item.getStudent()
-        );
-
-        return responseDto;
-    }
-
     // 분실물 가져가기
     @Transactional
     public ItemResponseDto takeItem(Long itemId, TakeItemRequestDto dto){

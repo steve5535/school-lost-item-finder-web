@@ -2,7 +2,9 @@ package com.study.schoollostitemfinder.service;
 
 import com.study.schoollostitemfinder.dto.TemporaryItemRequestDto;
 import com.study.schoollostitemfinder.dto.TemporaryItemResponseDto;
+import com.study.schoollostitemfinder.entity.Item;
 import com.study.schoollostitemfinder.entity.TemporaryItem;
+import com.study.schoollostitemfinder.repository.ItemRepository;
 import com.study.schoollostitemfinder.repository.TemporaryItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.List;
 public class TemporaryItemService {
 
     private final TemporaryItemRepository temporaryItemRepository;
+    private final ItemRepository itemRepository;
 
     // 임시 아이템 전체 조회
     public List<TemporaryItemResponseDto> getItems() {
@@ -64,19 +67,31 @@ public class TemporaryItemService {
     // 아이템 수락
     @Transactional
     public TemporaryItemResponseDto acceptState(Long itemId) {
-        TemporaryItem item = temporaryItemRepository.findById(itemId)
+        TemporaryItem temporaryItem = temporaryItemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 아이템은 없습니다"));
 
-        item.setIsAccept(true);
+        temporaryItem.setIsAccept(true);
+
+        // 임시 아이템을 아이템 객체로 변경하고
+        Item item = new Item(
+                temporaryItem.getItemName(),
+                temporaryItem.getItemDetail(),
+                temporaryItem.getItemPlace(),
+                temporaryItem.getItemImg(),
+                temporaryItem.getSignUpAt()
+        );
+
+        // 변경된 아이템 객체를 저장
+        itemRepository.save(item);
 
         TemporaryItemResponseDto responseDto = new TemporaryItemResponseDto(
-                item.getTemporaryItemId(),
-                item.getItemName(),
-                item.getItemDetail(),
-                item.getItemPlace(),
-                item.getItemImg(),
-                item.getIsAccept(),
-                item.getSignUpAt()
+                temporaryItem.getTemporaryItemId(),
+                temporaryItem.getItemName(),
+                temporaryItem.getItemDetail(),
+                temporaryItem.getItemPlace(),
+                temporaryItem.getItemImg(),
+                temporaryItem.getIsAccept(),
+                temporaryItem.getSignUpAt()
         );
         return responseDto;
     };
