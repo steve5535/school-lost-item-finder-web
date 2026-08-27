@@ -13,6 +13,6 @@ public class TemporaryItemResponseDto {
     private String itemDetail;
     private String itemPlace;
     private String itemImg;
-    private Boolean itemState;
+    private Boolean isAccept;
     private LocalDateTime signUp;
 }

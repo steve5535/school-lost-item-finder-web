@@ -16,7 +16,7 @@ public class LoginService {
 
     // 로그인
     public void login(LoginRequestDto dto, HttpSession session) {
-        User user = userRepository.findByUsername(dto.getUserName())
+        User user = userRepository.findByUserName(dto.getUserName())
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 유저는 없습니다"));
 
         if(!user.getPassword().equals(dto.getPassword())) {
