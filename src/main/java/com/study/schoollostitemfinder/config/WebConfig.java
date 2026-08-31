@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/login",
                         "/sign-up",
                         "/items",
-                        "/itmes/{itemId}",
+                        "/items/{itemId}",
                         "/items/take/{itemId}",
                         "/temporary-item"
                 );
@@ -25,7 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5500")
+                .allowedOrigins("http://localhost:5500", "http://127.0.0.1:5500")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
