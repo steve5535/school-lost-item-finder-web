@@ -39,6 +39,25 @@ public class TemporaryItemService {
         return responseDtos;
     }
 
+    // 임시 아이템 단건조회
+    @Transactional
+    public TemporaryItemResponseDto getItem(Long itemId) {
+        TemporaryItem item = temporaryItemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 아이템은 없습니다"));
+
+        TemporaryItemResponseDto responseDto = new TemporaryItemResponseDto(
+                item.getTemporaryItemId(),
+                item.getItemName(),
+                item.getItemDetail(),
+                item.getItemPlace(),
+                item.getItemImg(),
+                item.getIsAccept(),
+                item.getSignUpAt()
+        );
+
+        return responseDto;
+    }
+
     // 임시 아이템 등록
     @Transactional
     public TemporaryItemResponseDto singUpItem(TemporaryItemRequestDto dto) {

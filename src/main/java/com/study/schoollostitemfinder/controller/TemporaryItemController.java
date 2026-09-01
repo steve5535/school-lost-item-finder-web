@@ -22,6 +22,12 @@ public class TemporaryItemController {
         return temporaryItemService.getItems();
     }
 
+    // 단건조회
+    @GetMapping("/temporary-item/{itemId}")
+    public TemporaryItemResponseDto getItem(@PathVariable Long itemId) {
+        return temporaryItemService.getItem(itemId);
+    }
+
     // 등록
     @PostMapping("/temporary-item")
     public TemporaryItemResponseDto singUp(@RequestBody TemporaryItemRequestDto requestDto) {
