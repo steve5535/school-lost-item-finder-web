@@ -3,6 +3,7 @@ package com.study.schoollostitemfinder.filter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 public class LoginInterceptor implements HandlerInterceptor {
@@ -12,6 +13,11 @@ public class LoginInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) throws Exception {
+
+        if(CorsUtils.isPreFlightRequest(request)){
+            return true;
+        }
+
         HttpSession session = request.getSession(false);
 
         if(session == null || session.getAttribute("LOGIN_USER") == null) {
