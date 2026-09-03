@@ -103,6 +103,9 @@ public class TemporaryItemService {
         // 변경된 아이템 객체를 저장
         itemRepository.save(item);
 
+        // 임시 테이블에서 삭제
+        temporaryItemRepository.deleteById(itemId);
+
         TemporaryItemResponseDto responseDto = new TemporaryItemResponseDto(
                 temporaryItem.getTemporaryItemId(),
                 temporaryItem.getItemName(),
