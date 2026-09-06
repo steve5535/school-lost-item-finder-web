@@ -88,6 +88,7 @@ public class ItemService {
     }
 
     // 분실물 삭제(관리자)
+    @Transactional
     public void deleteItem(Long itemId) {
         itemRepository.deleteById(itemId);
     }
@@ -119,4 +120,26 @@ public class ItemService {
         return responseDto;
     }
 
+    // 가져간 분실물 취소
+    @Transactional
+    public ItemResponseDto cancelTakeItem(Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 item은 존재하지 않습니다."));
+
+        item.setTakeAt(null);
+        item.setStudent(null);
+
+        ItemResponseDto responseDto = new ItemResponseDto(
+                item.getItemId(),
+                item.getItemName(),
+                item.getItemDetail(),
+                item.getItemPlace(),
+                item.getItemImg(),
+                item.getSignUpAt(),
+                item.getTakeAt(),
+                item.getStudent()
+        );
+
+        return responseDto;
+    }
 }

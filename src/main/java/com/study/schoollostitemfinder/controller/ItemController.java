@@ -52,5 +52,11 @@ public class ItemController {
         return itemService.takeItem(itemId, requestDto);
     }
 
+    // 가져간 분실물 거절(다시 정식분실물로)
+    @PatchMapping("items/cancel-take/{itemId}")
+    public ItemResponseDto cancelTakeItem(@PathVariable Long itemId) {
+        log.info("가져간 분실물 취소 완료");
+        return itemService.cancelTakeItem(itemId);
+    }
 
 }
