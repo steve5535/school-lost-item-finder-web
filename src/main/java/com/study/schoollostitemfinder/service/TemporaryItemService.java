@@ -9,7 +9,9 @@ import com.study.schoollostitemfinder.repository.TemporaryItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class TemporaryItemService {
 
     private final TemporaryItemRepository temporaryItemRepository;
     private final ItemRepository itemRepository;
+    private final ImageService imageService;
 
     // 임시 아이템 전체 조회
     public List<TemporaryItemResponseDto> getItems() {
@@ -60,23 +63,32 @@ public class TemporaryItemService {
 
     // 임시 아이템 등록
     @Transactional
-    public TemporaryItemResponseDto singUpItem(TemporaryItemRequestDto dto) {
+    public TemporaryItemResponseDto singUpItem(TemporaryItemRequestDto dto, MultipartFile file) {
+
+        String imageUrl = "";
+        try {
+            imageUrl = imageService.save(file);
+        } catch (IOException e) {
+            // 로그 남기기
+        }
+
         TemporaryItem temporaryItem = new TemporaryItem(
                 dto.getItemName(),
                 dto.getItemDetail(),
                 dto.getItemPlace(),
-                dto.getItemImg(),
+                imageUrl,
                 dto.getIsAccept()
         );
 
         temporaryItemRepository.save(temporaryItem);
+
 
         TemporaryItemResponseDto responseDto = new TemporaryItemResponseDto(
                 temporaryItem.getTemporaryItemId(),
                 temporaryItem.getItemName(),
                 temporaryItem.getItemDetail(),
                 temporaryItem.getItemPlace(),
-                temporaryItem.getItemImg(),
+                imageUrl,
                 temporaryItem.getIsAccept(),
                 temporaryItem.getSignUpAt()
         );

@@ -6,6 +6,7 @@ import com.study.schoollostitemfinder.service.TemporaryItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,9 +31,12 @@ public class TemporaryItemController {
 
     // 등록
     @PostMapping("/temporary-item")
-    public TemporaryItemResponseDto singUp(@RequestBody TemporaryItemRequestDto requestDto) {
+    public TemporaryItemResponseDto singUp(
+            @RequestPart("request") TemporaryItemRequestDto requestDto,
+            @RequestPart("file")MultipartFile file
+            ) {
         log.info("임시 아이템 등록 완료");
-        return temporaryItemService.singUpItem(requestDto);
+        return temporaryItemService.singUpItem(requestDto, file);
     }
 
     // 수락
