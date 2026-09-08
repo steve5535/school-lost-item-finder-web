@@ -12,7 +12,9 @@ import com.study.schoollostitemfinder.repository.TemporaryItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final StudentRepository studentRepository;
     private final TemporaryItemRepository temporaryItemRepository;
+    private final ImageService imageService;
 
     // 분실물 전체 조회
     public List<ItemResponseDto> getItems() {
@@ -64,21 +67,29 @@ public class ItemService {
 
     // 분실물 수정(관리자)
     @Transactional
-    public ItemResponseDto updateItem(Long itemId, ItemRequestDto dto) {
+    public ItemResponseDto updateItem(Long itemId, ItemRequestDto dto, MultipartFile file) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 item은 존재하지 않습니다."));
+
+        String imageUrl = "";
+        try {
+            imageUrl = imageService.update(file, item.getItemImg());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         item.setItemName(dto.getItemName());
         item.setItemDetail(dto.getItemDetail());
         item.setItemPlace(dto.getItemPlace());
-        item.setItemImg(dto.getItemImg());
+        item.setItemImg(imageUrl);
+
 
         ItemResponseDto responseDto = new ItemResponseDto(
                 item.getItemId(),
                 item.getItemName(),
                 item.getItemDetail(),
                 item.getItemPlace(),
-                item.getItemImg(),
+                imageUrl,
                 item.getSignUpAt(),
                 item.getTakeAt(),
                 item.getStudent()
@@ -90,6 +101,15 @@ public class ItemService {
     // 분실물 삭제(관리자)
     @Transactional
     public void deleteItem(Long itemId) {
+        TemporaryItem item = temporaryItemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 아이템은 없습니다"));
+
+        try {
+            imageService.delete(item.getItemImg());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         itemRepository.deleteById(itemId);
     }
 

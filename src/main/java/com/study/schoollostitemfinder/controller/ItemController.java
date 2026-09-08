@@ -7,6 +7,7 @@ import com.study.schoollostitemfinder.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,9 +34,13 @@ public class ItemController {
 
     // 수정
     @PatchMapping("/items/{itemId}")
-    private ItemResponseDto updateItem(@PathVariable Long itemId, @RequestBody ItemRequestDto requestDto) {
+    private ItemResponseDto updateItem(
+            @PathVariable Long itemId,
+            @RequestPart("request") ItemRequestDto requestDto,
+            @RequestPart("file") MultipartFile file
+    ) {
         log.info("분실물 수정 완료");
-        return itemService.updateItem(itemId, requestDto);
+        return itemService.updateItem(itemId, requestDto, file);
     }
 
     // 삭제

@@ -69,7 +69,7 @@ public class TemporaryItemService {
         try {
             imageUrl = imageService.save(file);
         } catch (IOException e) {
-            // 로그 남기기
+            throw new RuntimeException(e);
         }
 
         TemporaryItem temporaryItem = new TemporaryItem(
@@ -153,6 +153,15 @@ public class TemporaryItemService {
     // 아이템 삭제
     @Transactional
     public void deleteItem(Long itemId) {
+        TemporaryItem item = temporaryItemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 아이템은 없습니다"));
+
+        try {
+            imageService.delete(item.getItemImg());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         temporaryItemRepository.deleteById(itemId);
     }
 }
