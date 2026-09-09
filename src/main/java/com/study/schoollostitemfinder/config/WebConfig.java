@@ -26,7 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/items/{itemId}",
                         "/items/take/{itemId}",
                         "/temporary-item",
-                        "/images/**"
+                        "/image/**"
                 );
     }
 
