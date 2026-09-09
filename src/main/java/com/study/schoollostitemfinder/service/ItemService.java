@@ -101,7 +101,7 @@ public class ItemService {
     // 분실물 삭제(관리자)
     @Transactional
     public void deleteItem(Long itemId) {
-        TemporaryItem item = temporaryItemRepository.findById(itemId)
+        Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 아이템은 없습니다"));
 
         try {
