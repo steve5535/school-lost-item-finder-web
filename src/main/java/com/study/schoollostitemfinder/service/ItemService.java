@@ -73,7 +73,6 @@ public class ItemService {
 
         String imageUrl = item.getItemImg();
 
-        // 새 사진을 선택한 경우에만 기존 사진을 삭제하고 새 사진으로 교체
         if (file != null && !file.isEmpty()) {
             try {
                 imageUrl = imageService.update(file, item.getItemImg());

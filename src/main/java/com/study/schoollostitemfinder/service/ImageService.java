@@ -48,28 +48,36 @@ public class ImageService {
 
     // 이미지 수정
     public String update(MultipartFile file, String imageUrl) throws IOException {
-        String originFileName = Paths.get(imageUrl).getFileName().toString();
-
-        Path filePath = Paths.get(uploadDir).resolve(originFileName);
-
-        Files.deleteIfExists(filePath);
 
         Path uploadPath = Paths.get(uploadDir);
 
-        if(!Files.exists(uploadPath)){
+        if (imageUrl != null && !imageUrl.isBlank()) {
+
+            String originFileName = Paths.get(imageUrl).getFileName().toString();
+
+            if (!originFileName.isBlank()) {
+                Path filePath = uploadPath.resolve(originFileName);
+                if (Files.isRegularFile(filePath)) {
+                    Files.deleteIfExists(filePath);
+                }
+            }
+        }
+
+        if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
         String originalFilename = file.getOriginalFilename();
         String extension = "";
 
-        if(originalFilename != null && originalFilename.contains(".")){
+        if (originalFilename != null && originalFilename.contains(".")) {
             extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
 
         String fileName = UUID.randomUUID() + extension;
 
         Path resolve = uploadPath.resolve(fileName);
+
         file.transferTo(resolve);
 
         return "/image/" + fileName;
