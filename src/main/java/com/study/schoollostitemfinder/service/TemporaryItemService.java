@@ -159,7 +159,9 @@ public class TemporaryItemService {
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 아이템은 없습니다"));
 
         try {
-            imageService.delete(item.getItemImg());
+            if (item.getItemImg() != null && !item.getItemImg().isBlank()) {
+                imageService.delete(item.getItemImg());
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

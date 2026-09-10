@@ -38,6 +38,9 @@ public class ImageService {
 
     // 이미지 삭제
     public void delete(String imageUrl) throws IOException {
+        if (imageUrl == null || imageUrl.isBlank()) {
+            return;
+        }
 
         String originFileName = Paths.get(imageUrl).getFileName().toString();
 
