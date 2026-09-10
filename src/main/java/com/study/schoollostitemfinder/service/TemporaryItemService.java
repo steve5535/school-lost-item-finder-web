@@ -66,10 +66,12 @@ public class TemporaryItemService {
     public TemporaryItemResponseDto singUpItem(TemporaryItemRequestDto dto, MultipartFile file) {
 
         String imageUrl = "";
-        try {
-            imageUrl = imageService.save(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (file != null && !file.isEmpty()) {
+            try {
+                imageUrl = imageService.save(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         TemporaryItem temporaryItem = new TemporaryItem(

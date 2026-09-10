@@ -37,7 +37,7 @@ public class ItemController {
     private ItemResponseDto updateItem(
             @PathVariable Long itemId,
             @RequestPart("request") ItemRequestDto requestDto,
-            @RequestPart("file") MultipartFile file
+            @RequestPart(value = "file", required = false) MultipartFile file
     ) {
         log.info("분실물 수정 완료");
         return itemService.updateItem(itemId, requestDto, file);

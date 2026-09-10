@@ -33,7 +33,7 @@ public class TemporaryItemController {
     @PostMapping("/temporary-item")
     public TemporaryItemResponseDto singUp(
             @RequestPart("request") TemporaryItemRequestDto requestDto,
-            @RequestPart("file")MultipartFile file
+            @RequestPart(value = "file", required = false) MultipartFile file
             ) {
         log.info("임시 아이템 등록 완료");
         return temporaryItemService.singUpItem(requestDto, file);

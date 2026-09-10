@@ -71,18 +71,21 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 item은 존재하지 않습니다."));
 
-        String imageUrl = "";
-        try {
-            imageUrl = imageService.update(file, item.getItemImg());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        String imageUrl = item.getItemImg();
+
+        // 새 사진을 선택한 경우에만 기존 사진을 삭제하고 새 사진으로 교체
+        if (file != null && !file.isEmpty()) {
+            try {
+                imageUrl = imageService.update(file, item.getItemImg());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         item.setItemName(dto.getItemName());
         item.setItemDetail(dto.getItemDetail());
         item.setItemPlace(dto.getItemPlace());
         item.setItemImg(imageUrl);
-
 
         ItemResponseDto responseDto = new ItemResponseDto(
                 item.getItemId(),
