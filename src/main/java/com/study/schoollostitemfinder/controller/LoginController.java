@@ -18,18 +18,16 @@ public class LoginController {
 
     // 로그인
     @PostMapping("/login")
-    private String login(@RequestBody LoginRequestDto requestDto, HttpSession httpSession) {
+    private void login(@RequestBody LoginRequestDto requestDto, HttpSession httpSession) {
         loginService.login(requestDto, httpSession);
-
-        return "로그인 성공";
+        log.info("로그인 성공");
     };
 
     // 회원가입
     @PostMapping("/sign-up")
-    private String signUp(@RequestBody LoginRequestDto requestDto){
+    private void signUp(@RequestBody LoginRequestDto requestDto){
         loginService.signUp(requestDto);
-
-        return "회원가입 완료";
+        log.info("회원가입 완료");
     }
 
     
