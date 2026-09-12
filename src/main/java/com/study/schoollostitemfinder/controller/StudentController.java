@@ -17,18 +17,11 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    // 학생 등록
+    // 학생 추가
     @PostMapping("/student")
     public StudentResponseDto singUp(@RequestBody StudentRequestDto requestDto) {
         log.info("학생 등록 완료");
         return studentService.singUp(requestDto);
-    }
-
-    // 학생 삭제
-    @DeleteMapping("/student/{studentId}")
-    public void deleteStudent(@PathVariable Long studentId) {
-        studentService.deleteStudent(studentId);
-        log.info("학생 삭제 완료");
     }
 
     // 엑셀에서 학생 불러오기

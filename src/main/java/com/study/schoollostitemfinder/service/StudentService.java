@@ -20,12 +20,12 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    // 학생 등록
+    // 학생 추가
     @Transactional
-    public StudentResponseDto singUp(StudentRequestDto dto) {
-        Student student = new Student(
-                dto.getStudentNumber(),
-                dto.getStudentName()
+    public StudentResponseDto singUp(StudentRequestDto requestDto) {
+        Student student  = new Student(
+                requestDto.getStudentNumber(),
+                requestDto.getStudentName()
         );
         studentRepository.save(student);
 
@@ -38,12 +38,7 @@ public class StudentService {
         return responseDto;
     }
 
-    // 학생 삭제(관리자)
-    @Transactional
-    public void deleteStudent(Long studentId) {
-        studentRepository.deleteById(studentId);
-    }
-
+    // db에 있던 학생을 삭제하고 엑셀로 학생 추가
     @Transactional
     public void uploadExcel(MultipartFile file) throws IOException {
 
@@ -69,6 +64,7 @@ public class StudentService {
             }
         }
 
+        studentRepository.deleteAll();
         studentRepository.saveAll(students);
     }
 }

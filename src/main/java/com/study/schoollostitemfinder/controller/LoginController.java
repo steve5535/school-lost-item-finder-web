@@ -16,6 +16,7 @@ public class LoginController {
 
     private final LoginService loginService;
 
+    // 로그인
     @PostMapping("/login")
     private String login(@RequestBody LoginRequestDto requestDto, HttpSession httpSession) {
         loginService.login(requestDto, httpSession);
@@ -23,6 +24,7 @@ public class LoginController {
         return "로그인 성공";
     };
 
+    // 회원가입
     @PostMapping("/sign-up")
     private String signUp(@RequestBody LoginRequestDto requestDto){
         loginService.signUp(requestDto);
