@@ -24,9 +24,10 @@ public class StudentController {
         return studentService.singUp(requestDto);
     }
 
-    // 엑셀에서 학생 불러오기
+    // 엑셀에서 학생 불러와서 저장
     @PostMapping("/student/excel-upload")
     public void excelUpload(@RequestParam("file")MultipartFile file) throws IOException {
-            studentService.uploadExcel(file);
+        log.info("엑셀로 학생 등록 완료");
+        studentService.uploadExcel(file);
     }
 }
