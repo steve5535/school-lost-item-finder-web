@@ -3,6 +3,7 @@ package com.study.schoollostitemfinder.service;
 import com.study.schoollostitemfinder.dto.StudentRequestDto;
 import com.study.schoollostitemfinder.dto.StudentResponseDto;
 import com.study.schoollostitemfinder.entity.Student;
+import com.study.schoollostitemfinder.repository.ItemRepository;
 import com.study.schoollostitemfinder.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
@@ -19,6 +20,7 @@ import java.util.List;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final ItemRepository itemRepository;
 
     // 학생 추가
     @Transactional
@@ -38,7 +40,7 @@ public class StudentService {
         return responseDto;
     }
 
-    // db에 있던 학생을 삭제하고 엑셀로 학생 추가
+    // 엑셀로 학생 추가(가져가기 완료된 분실물 삭제, db에 있던 학생을 삭제)
     @Transactional
     public void uploadExcel(MultipartFile file) throws IOException {
 
@@ -64,6 +66,7 @@ public class StudentService {
             }
         }
 
+        itemRepository.deleteByTakeAtIsNotNull();
         studentRepository.deleteAll();
         studentRepository.saveAll(students);
     }
