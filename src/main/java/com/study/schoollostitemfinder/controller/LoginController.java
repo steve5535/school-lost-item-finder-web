@@ -18,9 +18,11 @@ public class LoginController {
 
     // 로그인
     @PostMapping("/login")
-    private void login(@RequestBody LoginRequestDto requestDto, HttpSession httpSession) {
-        loginService.login(requestDto, httpSession);
+    private String login(@RequestBody LoginRequestDto requestDto) {
+        String token = loginService.login(requestDto);
         log.info("로그인 성공");
+
+        return token;
     };
 
     // 회원가입

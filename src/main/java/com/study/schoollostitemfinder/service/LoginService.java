@@ -2,6 +2,7 @@ package com.study.schoollostitemfinder.service;
 
 import com.study.schoollostitemfinder.dto.LoginRequestDto;
 import com.study.schoollostitemfinder.entity.User;
+import com.study.schoollostitemfinder.jwt.JwtUtil;
 import com.study.schoollostitemfinder.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class LoginService {
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     // 로그인
-    public void login(LoginRequestDto dto, HttpSession session) {
+    public String login(LoginRequestDto dto) {
         User user = userRepository.findByUserName(dto.getUserName())
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 유저는 없습니다"));
 
@@ -23,7 +25,7 @@ public class LoginService {
             throw new RuntimeException("로그인 실패");
         }
 
-        session.setAttribute("LOGIN_USER", user.getUserId());
+        return jwtUtil.generateToken(user.getUserId().toString());
     }
 
     // 회원가입

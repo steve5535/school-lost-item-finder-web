@@ -1,6 +1,7 @@
 package com.study.schoollostitemfinder.config;
 
 import com.study.schoollostitemfinder.filter.LoginInterceptor;
+import com.study.schoollostitemfinder.jwt.JwtUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -15,9 +16,15 @@ public class WebConfig implements WebMvcConfigurer {
 
     private String uploadDir = "C:/server/uploads";
 
+    public final JwtUtil jwtUtil;
+
+    public WebConfig(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor())
+        registry.addInterceptor(new LoginInterceptor(jwtUtil))
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/login",

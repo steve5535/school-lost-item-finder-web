@@ -1,12 +1,19 @@
 package com.study.schoollostitemfinder.filter;
 
+import com.study.schoollostitemfinder.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Slf4j
+@RequiredArgsConstructor
 public class LoginInterceptor implements HandlerInterceptor {
+
+    private final JwtUtil jwtUtil;
+
     @Override
     public boolean preHandle(
             HttpServletRequest request,
@@ -18,9 +25,16 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        HttpSession session = request.getSession(false);
+        String authorization = request.getHeader("Authorization");
 
-        if(session == null || session.getAttribute("LOGIN_USER") == null) {
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return false;
+        }
+
+        String token = authorization.substring(7);
+
+        if (!jwtUtil.validateToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
