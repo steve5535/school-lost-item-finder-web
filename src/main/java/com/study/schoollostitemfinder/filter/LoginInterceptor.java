@@ -34,6 +34,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         String token = authorization.substring(7);
 
+        if (token.isBlank()) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return false;
+        }
+
         if (!jwtUtil.validateToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
