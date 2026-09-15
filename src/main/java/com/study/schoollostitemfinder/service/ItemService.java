@@ -6,6 +6,9 @@ import com.study.schoollostitemfinder.dto.TakeItemRequestDto;
 import com.study.schoollostitemfinder.entity.Item;
 import com.study.schoollostitemfinder.entity.Student;
 import com.study.schoollostitemfinder.entity.TemporaryItem;
+import com.study.schoollostitemfinder.exception.BadRequestException;
+import com.study.schoollostitemfinder.exception.ImageProcessingException;
+import com.study.schoollostitemfinder.exception.NotFoundException;
 import com.study.schoollostitemfinder.repository.ItemRepository;
 import com.study.schoollostitemfinder.repository.StudentRepository;
 import com.study.schoollostitemfinder.repository.TemporaryItemRepository;
@@ -51,7 +54,7 @@ public class ItemService {
     // 단건 조회
     public ItemResponseDto getItem(Long itemId) {
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 item은 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
         ItemResponseDto responseDto = new ItemResponseDto(
                 item.getItemId(),
                 item.getItemName(),
@@ -69,7 +72,7 @@ public class ItemService {
     @Transactional
     public ItemResponseDto updateItem(Long itemId, ItemRequestDto dto, MultipartFile file) {
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 item은 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
 
         String imageUrl = item.getItemImg();
 
@@ -77,7 +80,7 @@ public class ItemService {
             try {
                 imageUrl = imageService.update(file, item.getItemImg());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new ImageProcessingException("이미지 처리에 실패했습니다.", e);
             }
         }
 
@@ -104,12 +107,12 @@ public class ItemService {
     @Transactional
     public void deleteItem(Long itemId) {
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 아이템은 없습니다"));
+                .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
 
         try {
             imageService.delete(item.getItemImg());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ImageProcessingException("이미지 처리에 실패했습니다.", e);
         }
 
         itemRepository.deleteById(itemId);
@@ -119,11 +122,14 @@ public class ItemService {
     @Transactional
     public ItemResponseDto takeItem(Long itemId, TakeItemRequestDto dto){
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 item은 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
 
         // 미리 등록된 학생의 학번이 일치하는지 확인
         Student student = studentRepository.findByStudentNumber(dto.getStudentNumber())
-                .orElseThrow(() -> new IllegalArgumentException("해당 학번의 학생은 존재하지 않습니다"));
+                .orElseThrow(() -> new NotFoundException("해당 학번의 학생은 존재하지 않습니다"));
+        if (!student.getStudentName().equals(dto.getStudentName())) {
+            throw new BadRequestException("학번과 이름이 일치하지 않습니다");
+        }
 
         item.setStudent(student);
         item.setTakeAt(LocalDateTime.now());
@@ -146,7 +152,7 @@ public class ItemService {
     @Transactional
     public ItemResponseDto cancelTakeItem(Long itemId) {
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 item은 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
 
         item.setTakeAt(null);
         item.setStudent(null);

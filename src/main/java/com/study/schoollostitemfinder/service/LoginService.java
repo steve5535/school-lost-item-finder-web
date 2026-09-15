@@ -2,6 +2,7 @@ package com.study.schoollostitemfinder.service;
 
 import com.study.schoollostitemfinder.dto.LoginRequestDto;
 import com.study.schoollostitemfinder.entity.User;
+import com.study.schoollostitemfinder.exception.LoginFailedException;
 import com.study.schoollostitemfinder.jwt.JwtUtil;
 import com.study.schoollostitemfinder.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
@@ -19,10 +20,10 @@ public class LoginService {
     // 로그인
     public String login(LoginRequestDto dto) {
         User user = userRepository.findByUserName(dto.getUserName())
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 유저는 없습니다"));
+                .orElseThrow(() -> new LoginFailedException("로그인 실패"));
 
         if(!user.getPassword().equals(dto.getPassword())) {
-            throw new RuntimeException("로그인 실패");
+            throw new LoginFailedException("로그인 실패");
         }
 
         return jwtUtil.generateToken(user.getUserId().toString());

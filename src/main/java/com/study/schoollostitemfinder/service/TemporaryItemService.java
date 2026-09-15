@@ -4,6 +4,8 @@ import com.study.schoollostitemfinder.dto.TemporaryItemRequestDto;
 import com.study.schoollostitemfinder.dto.TemporaryItemResponseDto;
 import com.study.schoollostitemfinder.entity.Item;
 import com.study.schoollostitemfinder.entity.TemporaryItem;
+import com.study.schoollostitemfinder.exception.ImageProcessingException;
+import com.study.schoollostitemfinder.exception.NotFoundException;
 import com.study.schoollostitemfinder.repository.ItemRepository;
 import com.study.schoollostitemfinder.repository.TemporaryItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +48,7 @@ public class TemporaryItemService {
     @Transactional
     public TemporaryItemResponseDto getItem(Long itemId) {
         TemporaryItem item = temporaryItemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 아이템은 없습니다"));
+                .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
 
         TemporaryItemResponseDto responseDto = new TemporaryItemResponseDto(
                 item.getTemporaryItemId(),
@@ -70,7 +72,7 @@ public class TemporaryItemService {
             try {
                 imageUrl = imageService.save(file);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new ImageProcessingException("이미지 처리에 실패했습니다.", e);
             }
         }
 
@@ -101,7 +103,7 @@ public class TemporaryItemService {
     @Transactional
     public TemporaryItemResponseDto acceptState(Long itemId) {
         TemporaryItem temporaryItem = temporaryItemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 아이템은 없습니다"));
+                .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
 
         temporaryItem.setIsAccept(true);
 
@@ -136,7 +138,7 @@ public class TemporaryItemService {
     @Transactional
     public TemporaryItemResponseDto declineState(Long itemId) {
         TemporaryItem item = temporaryItemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 아이템은 없습니다"));
+                .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
 
         item.setIsAccept(false);
 
@@ -156,14 +158,14 @@ public class TemporaryItemService {
     @Transactional
     public void deleteItem(Long itemId) {
         TemporaryItem item = temporaryItemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 아이템은 없습니다"));
+                .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
 
         try {
             if (item.getItemImg() != null && !item.getItemImg().isBlank()) {
                 imageService.delete(item.getItemImg());
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ImageProcessingException("이미지 처리에 실패했습니다.", e);
         }
 
         temporaryItemRepository.deleteById(itemId);
