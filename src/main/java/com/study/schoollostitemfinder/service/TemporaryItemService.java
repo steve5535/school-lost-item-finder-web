@@ -9,6 +9,7 @@ import com.study.schoollostitemfinder.exception.NotFoundException;
 import com.study.schoollostitemfinder.repository.ItemRepository;
 import com.study.schoollostitemfinder.repository.TemporaryItemRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TemporaryItemService {
@@ -119,6 +121,8 @@ public class TemporaryItemService {
         // 변경된 아이템 객체를 저장
         itemRepository.save(item);
 
+        log.info("임시 분실물 승인 - temporaryItemId: {}, temporaryItemName: {}", temporaryItem.getTemporaryItemId(), temporaryItem.getItemName());
+
         // 임시 테이블에서 삭제
         temporaryItemRepository.deleteById(itemId);
 
@@ -169,5 +173,7 @@ public class TemporaryItemService {
         }
 
         temporaryItemRepository.deleteById(itemId);
+
+        log.info("임시 분실물 삭제 - temporaryItemId: {}, temporaryItemName: {}", item.getTemporaryItemId(), item.getItemName());
     }
 }

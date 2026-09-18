@@ -13,6 +13,7 @@ import com.study.schoollostitemfinder.repository.ItemRepository;
 import com.study.schoollostitemfinder.repository.StudentRepository;
 import com.study.schoollostitemfinder.repository.TemporaryItemRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ItemService {
@@ -116,6 +118,8 @@ public class ItemService {
         }
 
         itemRepository.deleteById(itemId);
+
+        log.info("분실물 삭제 완료 - itemId: {}, itemName: {}", item.getItemId(), item.getItemName());
     }
 
     // 분실물 가져가기
