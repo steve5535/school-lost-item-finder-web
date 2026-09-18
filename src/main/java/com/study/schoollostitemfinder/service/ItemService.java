@@ -124,6 +124,10 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
 
+        if(dto.getStudentNumber() < 10000 || dto.getStudentNumber() > 99999) {
+            throw new BadRequestException("학번은 5자리 숫자여야 합니다.");
+        }
+
         // 미리 등록된 학생의 학번이 일치하는지 확인
         Student student = studentRepository.findByStudentNumber(dto.getStudentNumber())
                 .orElseThrow(() -> new NotFoundException("해당 학번의 학생은 존재하지 않습니다"));
