@@ -4,6 +4,7 @@ import com.study.schoollostitemfinder.dto.TemporaryItemRequestDto;
 import com.study.schoollostitemfinder.dto.TemporaryItemResponseDto;
 import com.study.schoollostitemfinder.entity.Item;
 import com.study.schoollostitemfinder.entity.TemporaryItem;
+import com.study.schoollostitemfinder.exception.BadRequestException;
 import com.study.schoollostitemfinder.exception.ImageProcessingException;
 import com.study.schoollostitemfinder.exception.NotFoundException;
 import com.study.schoollostitemfinder.repository.ItemRepository;
@@ -76,6 +77,11 @@ public class TemporaryItemService {
             } catch (IOException e) {
                 throw new ImageProcessingException("이미지 처리에 실패했습니다.", e);
             }
+        }
+        if(dto.getItemName().length() > 20
+                || dto.getItemDetail().length() > 200
+                || dto.getItemPlace().length() > 50) {
+            throw new BadRequestException("글자수 초과");
         }
 
         TemporaryItem temporaryItem = new TemporaryItem(
