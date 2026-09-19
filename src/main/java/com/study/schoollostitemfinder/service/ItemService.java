@@ -1,11 +1,8 @@
 package com.study.schoollostitemfinder.service;
 
-import com.study.schoollostitemfinder.dto.ItemRequestDto;
-import com.study.schoollostitemfinder.dto.ItemResponseDto;
-import com.study.schoollostitemfinder.dto.TakeItemRequestDto;
+import com.study.schoollostitemfinder.dto.*;
 import com.study.schoollostitemfinder.entity.Item;
 import com.study.schoollostitemfinder.entity.Student;
-import com.study.schoollostitemfinder.entity.TemporaryItem;
 import com.study.schoollostitemfinder.exception.BadRequestException;
 import com.study.schoollostitemfinder.exception.ImageProcessingException;
 import com.study.schoollostitemfinder.exception.NotFoundException;
@@ -30,7 +27,6 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final StudentRepository studentRepository;
-    private final TemporaryItemRepository temporaryItemRepository;
     private final ImageService imageService;
 
     // 분실물 전체 조회
@@ -38,6 +34,15 @@ public class ItemService {
         List<Item> items = itemRepository.findAll();
         List<ItemResponseDto> responseDtos = new ArrayList<>();
         for(Item item : items) {
+            TakeStudentResponseDto studentDto = null;
+
+            if (item.getStudent() != null) {
+                studentDto = new TakeStudentResponseDto(
+                        item.getStudent().getStudentNumber(),
+                        maskName(item.getStudent().getStudentName())
+                );
+            }
+
             ItemResponseDto responseDto = new ItemResponseDto(
                     item.getItemId(),
                     item.getItemName(),
@@ -46,7 +51,7 @@ public class ItemService {
                     item.getItemImg(),
                     item.getSignUpAt(),
                     item.getTakeAt(),
-                    item.getStudent()
+                    studentDto
             );
             responseDtos.add(responseDto);
         };
@@ -57,6 +62,15 @@ public class ItemService {
     public ItemResponseDto getItem(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
+
+        TakeStudentResponseDto studentDto = null;
+        if (item.getStudent() != null) {
+            studentDto = new TakeStudentResponseDto(
+                    item.getStudent().getStudentNumber(),
+                    maskName(item.getStudent().getStudentName())
+            );
+        }
+
         ItemResponseDto responseDto = new ItemResponseDto(
                 item.getItemId(),
                 item.getItemName(),
@@ -65,7 +79,7 @@ public class ItemService {
                 item.getItemImg(),
                 item.getSignUpAt(),
                 item.getTakeAt(),
-                item.getStudent()
+                studentDto
         );
         return responseDto;
     }
@@ -86,6 +100,13 @@ public class ItemService {
             }
         }
 
+        TakeStudentResponseDto studentDto = null;
+        if (item.getStudent() != null) {
+            studentDto = new TakeStudentResponseDto(
+                    item.getStudent().getStudentNumber(),
+                    maskName(item.getStudent().getStudentName())
+            );
+        }
         item.setItemName(dto.getItemName());
         item.setItemDetail(dto.getItemDetail());
         item.setItemPlace(dto.getItemPlace());
@@ -99,7 +120,7 @@ public class ItemService {
                 imageUrl,
                 item.getSignUpAt(),
                 item.getTakeAt(),
-                item.getStudent()
+                studentDto
         );
 
         return responseDto;
@@ -124,7 +145,7 @@ public class ItemService {
 
     // 분실물 가져가기
     @Transactional
-    public ItemResponseDto takeItem(Long itemId, TakeItemRequestDto dto){
+    public ItemResponseDto takeItem(Long itemId, TakeStudentRequestDto dto){
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("해당하는 아이템은 없습니다"));
 
@@ -142,6 +163,11 @@ public class ItemService {
         item.setStudent(student);
         item.setTakeAt(LocalDateTime.now());
 
+        TakeStudentResponseDto studentDto = new TakeStudentResponseDto(
+                student.getStudentNumber(),
+                maskName(student.getStudentName())
+        );
+
         ItemResponseDto responseDto = new ItemResponseDto(
                 item.getItemId(),
                 item.getItemName(),
@@ -150,7 +176,7 @@ public class ItemService {
                 item.getItemImg(),
                 item.getSignUpAt(),
                 item.getTakeAt(),
-                item.getStudent()
+                studentDto
         );
 
         return responseDto;
@@ -173,9 +199,24 @@ public class ItemService {
                 item.getItemImg(),
                 item.getSignUpAt(),
                 item.getTakeAt(),
-                item.getStudent()
+                null
         );
 
         return responseDto;
+    }
+
+    // 이름 마스킹 함수
+    private String maskName(String name) {
+        if (name == null || name.length() <= 1) {
+            return name;
+        }
+
+        if (name.length() == 2) {
+            return name.charAt(0) + "*";
+        }
+
+        return name.charAt(0)
+                + "*".repeat(name.length() - 2)
+                + name.charAt(name.length() - 1);
     }
 }

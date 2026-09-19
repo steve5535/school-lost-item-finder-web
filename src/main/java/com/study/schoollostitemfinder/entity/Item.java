@@ -1,6 +1,5 @@
 package com.study.schoollostitemfinder.entity;
 
-import com.study.schoollostitemfinder.common.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

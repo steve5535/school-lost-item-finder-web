@@ -3,7 +3,7 @@ package com.study.schoollostitemfinder.dto;
 import lombok.Getter;
 
 @Getter
-public class TakeItemRequestDto {
+public class TakeStudentRequestDto {
     public int studentNumber;
     public String studentName;
 }

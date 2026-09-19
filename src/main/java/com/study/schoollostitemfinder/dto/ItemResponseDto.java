@@ -1,6 +1,5 @@
 package com.study.schoollostitemfinder.dto;
 
-import com.study.schoollostitemfinder.entity.Student;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,5 +15,5 @@ public class ItemResponseDto {
     private String itemImg;
     private LocalDateTime signUpAt;
     private LocalDateTime takeAt;
-    private Student student;
+    private TakeStudentResponseDto student;
 }

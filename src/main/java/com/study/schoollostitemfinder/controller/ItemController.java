@@ -2,7 +2,7 @@ package com.study.schoollostitemfinder.controller;
 
 import com.study.schoollostitemfinder.dto.ItemRequestDto;
 import com.study.schoollostitemfinder.dto.ItemResponseDto;
-import com.study.schoollostitemfinder.dto.TakeItemRequestDto;
+import com.study.schoollostitemfinder.dto.TakeStudentRequestDto;
 import com.study.schoollostitemfinder.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +46,7 @@ public class ItemController {
 
     // 분실물 가져가기
     @PatchMapping("/items/take/{itemId}")
-    public ItemResponseDto takeItem(@PathVariable Long itemId, @RequestBody TakeItemRequestDto requestDto) {
+    public ItemResponseDto takeItem(@PathVariable Long itemId, @RequestBody TakeStudentRequestDto requestDto) {
         return itemService.takeItem(itemId, requestDto);
     }
 

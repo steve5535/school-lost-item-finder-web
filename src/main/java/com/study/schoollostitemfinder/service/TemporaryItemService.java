@@ -78,6 +78,7 @@ public class TemporaryItemService {
                 throw new ImageProcessingException("이미지 처리에 실패했습니다.", e);
             }
         }
+
         if(dto.getItemName().length() > 20
                 || dto.getItemDetail().length() > 200
                 || dto.getItemPlace().length() > 50) {
